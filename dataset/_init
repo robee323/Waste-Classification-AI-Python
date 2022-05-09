@@ -1,0 +1,4 @@
+import os
+
+TRAIN_DATASET_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "train"))
+TEST_DATASET_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "test"))
