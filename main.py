@@ -63,40 +63,46 @@ validation_datagen = ImageDataGenerator(rescale = 1./255)
 
 train_generator = training_datagen.flow_from_directory(
 	TRAINING_DIR,
-	target_size=(150,150),
+	target_size=(100,100),
 	class_mode='categorical',
-  batch_size=126
-)
+  batch_size=40
+  )
 
 validation_generator = validation_datagen.flow_from_directory(
 	VALIDATION_DIR,
-	target_size=(150,150),
+	target_size=(100,100),
 	class_mode='categorical',
-  batch_size=126
+  batch_size=40
 )
 
 model = tf.keras.models.Sequential([
-    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
-    # This is the first convolution
-    tf.keras.layers.Conv2D(100, (3,3), activation='relu', input_shape=(150, 150, 3)),
+    # Note the input shape is the desired size of the image 100x100 with 3 bytes color
+    # The first convolution
+    tf.keras.layers.Conv2D(128, (1,1), activation='relu', input_shape=(100, 100, 3)),
     tf.keras.layers.MaxPooling2D(2, 2),
     # The second convolution
-    tf.keras.layers.Conv2D(100, (3,3), activation='relu'),
+    tf.keras.layers.Conv2D(256,(1,1), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # The third convolution
+    tf.keras.layers.Conv2D(512, (1,1), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # The fourth convolution
+    tf.keras.layers.Conv2D(1024, (1,1), activation='relu'),
     tf.keras.layers.MaxPooling2D(2,2),
     # Flatten the results to feed into a DNN
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dropout(0.5),
-    # 50 neuron hidden layer
-    tf.keras.layers.Dense(50, activation='relu'),
+    # 128 neuron hidden layer
+    tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(6, activation='softmax')
 ])
 
 
 model.summary()
 
-model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+model.compile(optimizer='adam', loss = 'categorical_crossentropy', metrics=['accuracy'])
 
-history = model.fit(train_generator, epochs=5, validation_data = validation_generator, verbose = 1, validation_steps=3)
+history = model.fit(train_generator, epochs=20, validation_data = validation_generator, verbose = 1, validation_steps=3)
 
 model.save("waste.h5")
 ####################################################################
