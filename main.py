@@ -24,14 +24,14 @@ import matplotlib.image as mpimg
 
 pic_index = 2
 
-next_rock = [os.path.join(cardboard_dir, fname) 
+cardboard = [os.path.join(cardboard_dir, fname) 
                 for fname in cardboard_files[pic_index-2:pic_index]]
-next_paper = [os.path.join(glass_dir, fname) 
+glass = [os.path.join(glass_dir, fname) 
                 for fname in glass_files[pic_index-2:pic_index]]
-next_scissors = [os.path.join(metal_dir, fname) 
+metal = [os.path.join(metal_dir, fname) 
                 for fname in metal_files[pic_index-2:pic_index]]
 
-for i, img_path in enumerate(next_rock+next_paper+next_scissors):
+for i, img_path in enumerate(cardboard+glass+metal):
   #print(img_path)
   img = mpimg.imread(img_path)
   plt.imshow(img)
